@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import time
 import sys
+import os
 
 WIDTH = 540
 HEIGHT = 600
@@ -123,7 +124,7 @@ def getBoard():
 
 
 def readBoard():
-    file = open("C:\\Users\\cezar\\Desktop\\LittleScripts\\input.txt", "r")
+    file = open( os.path.join(sys.path[0], "input.txt"), "r")
     board = file.readlines()
     tempBoard = getBoard()
     for i in range(9):
@@ -155,10 +156,10 @@ def main():
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
                 mouse = pygame.mouse.get_pos()
-                if mouse[0] >= 290 and mouse[0] <= 350 and mouse[1] >= 550 and mouse[1] <= 590:
+                if mouse[0] >= 270 and mouse[0] <= 360 and mouse[1] >= 550 and mouse[1] <= 590:
                     pygame.quit()
                     sys.exit()
-                if mouse[0] >= 190 and mouse[0] <= 250 and mouse[1] >= 550 and mouse[1] <= 590:
+                if mouse[0] >= 180 and mouse[0] <= 270 and mouse[1] >= 550 and mouse[1] <= 590:
                     mainProgram()
                     pygame.quit()
                     sys.exit()
@@ -169,9 +170,9 @@ pygame.init()
 windowSurface = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 pygame.display.set_caption("Grid")
 basicFont = pygame.font.Font(
-"C:\\Users\\cezar\\Desktop\\LittleScripts\\bebas.ttf", 24)
+    os.path.join(sys.path[0], "bebas.ttf"), 24)
 smallFont = pygame.font.Font(
-    "C:\\Users\\cezar\\Desktop\\LittleScripts\\bebas.ttf", 16
+    os.path.join(sys.path[0], "bebas.ttf"), 16
 )
 
 main()
