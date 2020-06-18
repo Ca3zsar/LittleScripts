@@ -13,6 +13,7 @@ WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
 GRAY = (128,128,128)
 
+START_PRESSED = 0
 
 def drawLines():
     # The main lines
@@ -29,16 +30,38 @@ def drawButtons():
     pygame.draw.rect(windowSurface,GRAY,(180,550,90,30),1)
     pygame.draw.rect(windowSurface,GRAY,(270,550,90,30),1)
     
-    startButton = smallFont.render("Start",True,BLACK)
+    if START_PRESSED == 0:
+        startButton = smallFont.render("Start",True,BLACK)
+    else:
+        startButton = smallFont.render("Stop",True,BLACK)
     windowSurface.blit(startButton, (180 + (45 - startButton.get_width()//2), 550 + (15 - startButton.get_height()//2)))
     
     quitButton = smallFont.render("Quit",True,BLACK)
     windowSurface.blit(quitButton, (270 + (45 - startButton.get_width()//2), 550 + (15 - startButton.get_height()//2)))
     
     
+def stopPressed(board):
+    global START_PRESSED
+    START_PRESSED = 1 - START_PRESSED
+    print(START_PRESSED)
+    redraw(board)
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                mouse = pygame.mouse.get_pos()
+                if mouse[0] >= 270 and mouse[0] <= 360 and mouse[1] >= 550 and mouse[1] <= 580:
+                    pygame.quit()
+                    sys.exit()
+                if mouse[0] >= 180 and mouse[0] <= 270 and mouse[1] >= 550 and mouse[1] <= 580:
+                    START_PRESSED = 1 - START_PRESSED
+                    return True
 
-# Display the text.
-def redraw(board):
+def checkEvent(board):
+    global START_PRESSED
+    # print(START_PRESSED)
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -48,6 +71,19 @@ def redraw(board):
             if mouse[0] >= 270 and mouse[0] <= 360 and mouse[1] >= 550 and mouse[1] <= 580:
                 pygame.quit()
                 sys.exit()
+            if mouse[0] >= 180 and mouse[0] <= 270 and mouse[1] >= 550 and mouse[1] <= 580:
+                if START_PRESSED == 1:
+                    if stopPressed(board):
+                        break
+                else:
+                    START_PRESSED = 1 - START_PRESSED
+
+# Display the interface.
+def redraw(board):
+    
+    if board != None:
+        checkEvent(board)
+                
     windowSurface.fill(WHITE)
     drawLines()
     drawButtons()
@@ -146,10 +182,13 @@ def mainProgram():
 
 
 def main():
+    global START_PRESSED
+    testBoard = getBoard()
+    testBoard = readBoard()
+    redraw(testBoard)
     while True:
-        testBoard = getBoard()
-        testBoard = readBoard()
-        redraw(testBoard)
+        
+        
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -160,9 +199,8 @@ def main():
                     pygame.quit()
                     sys.exit()
                 if mouse[0] >= 180 and mouse[0] <= 270 and mouse[1] >= 550 and mouse[1] <= 590:
+                    START_PRESSED = 1 - START_PRESSED
                     mainProgram()
-                    pygame.quit()
-                    sys.exit()
     # mainProgram()
 
  # Initialize the window and font
