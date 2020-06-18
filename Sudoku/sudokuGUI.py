@@ -4,40 +4,43 @@ import time
 import sys
 import os
 
-WIDTH = 540
-HEIGHT = 600
+WIDTH = 600
+HEIGHT = 660
 
 # Colors
+BACK_COLOR = (17,17,17)
+TEXT_COLOR = (186,197,186)
+LINE_COLOR = (49,156,48)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
 GRAY = (128,128,128)
 
 START_PRESSED = 0
 
 def drawLines():
     # The main lines
-    for i in (180, 360):
-        pygame.draw.line(windowSurface, BLUE, (i, 0), (i, 540), 2)
-        pygame.draw.line(windowSurface, BLUE, (0, i), (540, i), 2)
+    for i in (210, 390):
+        pygame.draw.line(windowSurface, LINE_COLOR, (i, 30), (i, 570), 2)
+        pygame.draw.line(windowSurface, LINE_COLOR, (30, i), (570, i), 2)
 
     # The secondary lines
-    for i in (60, 120, 240, 300, 420, 480):
-        pygame.draw.line(windowSurface, BLUE, (i, 0), (i, 540), 1)
-        pygame.draw.line(windowSurface, BLUE, (0, i), (540, i), 1)
+    for i in (90, 150, 270, 330, 450, 510):
+        for j in (30,90,150,210,270,330,390,450,510):
+            pygame.draw.line(windowSurface, LINE_COLOR, (i, j+10), (i, j+50), 1)
+            pygame.draw.line(windowSurface, LINE_COLOR, (j+10, i), (j+50, i), 1)
 
 def drawButtons():
-    pygame.draw.rect(windowSurface,GRAY,(180,550,90,30),1)
-    pygame.draw.rect(windowSurface,GRAY,(270,550,90,30),1)
+    pygame.draw.rect(windowSurface,LINE_COLOR,(210,600,90,30),1)
+    pygame.draw.rect(windowSurface,LINE_COLOR,(300,600,90,30),1)
     
     if START_PRESSED == 0:
-        startButton = smallFont.render("Start",True,BLACK)
+        startButton = smallFont.render("Start",True,TEXT_COLOR)
     else:
-        startButton = smallFont.render("Stop",True,BLACK)
-    windowSurface.blit(startButton, (180 + (45 - startButton.get_width()//2), 550 + (15 - startButton.get_height()//2)))
+        startButton = smallFont.render("Stop",True,TEXT_COLOR)
+    windowSurface.blit(startButton, (210 + (45 - startButton.get_width()//2), 600 + (15 - startButton.get_height()//2)))
     
-    quitButton = smallFont.render("Quit",True,BLACK)
-    windowSurface.blit(quitButton, (270 + (45 - startButton.get_width()//2), 550 + (15 - startButton.get_height()//2)))
+    quitButton = smallFont.render("Quit",True,TEXT_COLOR)
+    windowSurface.blit(quitButton, (300 + (45 - startButton.get_width()//2), 600 + (15 - startButton.get_height()//2)))
     
     
 def stopPressed(board):
@@ -52,10 +55,10 @@ def stopPressed(board):
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
                 mouse = pygame.mouse.get_pos()
-                if mouse[0] >= 270 and mouse[0] <= 360 and mouse[1] >= 550 and mouse[1] <= 580:
+                if mouse[0] >= 300 and mouse[0] <= 390 and mouse[1] >= 600 and mouse[1] <= 630:
                     pygame.quit()
                     sys.exit()
-                if mouse[0] >= 180 and mouse[0] <= 270 and mouse[1] >= 550 and mouse[1] <= 580:
+                if mouse[0] >= 180 and mouse[0] <= 300 and mouse[1] >= 600 and mouse[1] <= 630:
                     START_PRESSED = 1 - START_PRESSED
                     return True
 
@@ -68,10 +71,10 @@ def checkEvent(board):
             sys.exit()
         if event.type == MOUSEBUTTONDOWN:
             mouse = pygame.mouse.get_pos()
-            if mouse[0] >= 270 and mouse[0] <= 360 and mouse[1] >= 550 and mouse[1] <= 580:
+            if mouse[0] >= 300 and mouse[0] <= 390 and mouse[1] >= 600 and mouse[1] <= 630:
                 pygame.quit()
                 sys.exit()
-            if mouse[0] >= 180 and mouse[0] <= 270 and mouse[1] >= 550 and mouse[1] <= 580:
+            if mouse[0] >= 180 and mouse[0] <= 300 and mouse[1] >= 600 and mouse[1] <= 630:
                 if START_PRESSED == 1:
                     if stopPressed(board):
                         break
@@ -84,19 +87,19 @@ def redraw(board):
     if board != None:
         checkEvent(board)
                 
-    windowSurface.fill(WHITE)
+    windowSurface.fill(BACK_COLOR)
     drawLines()
     drawButtons()
-    gap = WIDTH // 9
+    gap = (WIDTH-60) // 9
     if board == None:
         pygame.display.update()
         return
     for line in range(9):
         for column in range(9):
-            x = column * gap
-            y = line * gap
+            x = column * gap + 30
+            y = line * gap + 30
 
-            text = basicFont.render(board[line][column], 1, BLACK)
+            text = basicFont.render(board[line][column], 1, TEXT_COLOR)
             windowSurface.blit(text, (x + (gap//2 - text.get_width()//2), y + (gap//2 - text.get_height()//2)))
     
     pygame.display.update()
@@ -195,10 +198,10 @@ def main():
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
                 mouse = pygame.mouse.get_pos()
-                if mouse[0] >= 270 and mouse[0] <= 360 and mouse[1] >= 550 and mouse[1] <= 590:
+                if mouse[0] >= 300 and mouse[0] <= 390 and mouse[1] >= 600 and mouse[1] <= 630:
                     pygame.quit()
                     sys.exit()
-                if mouse[0] >= 180 and mouse[0] <= 270 and mouse[1] >= 550 and mouse[1] <= 590:
+                if mouse[0] >= 180 and mouse[0] <= 300 and mouse[1] >= 600 and mouse[1] <= 630:
                     START_PRESSED = 1 - START_PRESSED
                     mainProgram()
     # mainProgram()
